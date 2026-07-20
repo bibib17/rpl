@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rekayasa Perangkat Lunak — Ringkasan Poin Penting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EFF3EE; --card: #FFFFFF; --ink: #1E2A22; --ink-soft: #526056;
+    --border: #DCE5DD; --forest: #2F6B4F; --forest-dark: #23543D;
+    --amber: #E8A33D; --amber-soft: #FCEED8; --blue: #3A6EA5; --blue-soft: #E4EEF8;
+    --pink: #D9637A; --pink-soft: #FBE6EA; --code-bg: #1E2A22; --code-ink: #E9F1EA;
+    --radius: 18px; --shadow: 0 6px 20px rgba(30,42,34,0.06);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Plus Jakarta Sans', sans-serif; line-height:1.7; font-size:16px; }
+  h1,h2,h3,.display{ font-family:'Baloo 2', sans-serif; color:var(--forest-dark); line-height:1.25; }
+  a{ color:var(--forest); }
+  code, pre, .mono{ font-family:'JetBrains Mono', monospace; }
+
+  .shell{ display:grid; grid-template-columns: 270px 1fr; max-width:1240px; margin:0 auto; gap:0; }
+  @media (max-width: 900px){ .shell{ grid-template-columns: 1fr; } }
+
+  .sidebar{ position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto; padding:22px 14px 40px 22px; border-right:1px solid var(--border); scrollbar-width:thin; }
+  @media (max-width: 900px){ .sidebar{ position:relative; height:auto; border-right:none; border-bottom:1px solid var(--border); padding:16px; } }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:'Baloo 2', sans-serif; font-weight:800; font-size:1.05rem; color:var(--forest-dark); margin-bottom:20px; padding:0 6px; }
+  .brand .dot{ width:34px; height:34px; border-radius:10px; background:var(--forest); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex:none; }
+  nav.toc{ display:flex; flex-direction:column; gap:2px; }
+  nav.toc .grp-label{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); font-weight:700; margin:16px 8px 6px; }
+  nav.toc .grp-label:first-child{ margin-top:4px; }
+  nav.toc a{ text-decoration:none; color:var(--ink-soft); padding:8px 10px; border-radius:10px; font-size:0.92rem; display:flex; align-items:center; gap:8px; transition:background .15s, color .15s; }
+  nav.toc a .num{ font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--forest); width:22px; flex:none; }
+  nav.toc a:hover{ background:var(--amber-soft); color:var(--forest-dark); }
+  nav.toc a.active{ background:var(--forest); color:#fff; font-weight:600; }
+  nav.toc a.active .num{ color:#fff; }
+
+  main{ padding:0 26px 100px; min-width:0; }
+  .hero{ margin-top:26px; background: linear-gradient(160deg, var(--forest-dark), var(--forest) 60%, #3d8262); border-radius: 24px; padding:44px 38px; color:#F4FBF6; position:relative; overflow:hidden; }
+  .hero::after{ content:""; position:absolute; right:-60px; top:-60px; width:220px; height:220px; border-radius:50%; background:rgba(232,163,61,0.25); }
+  .hero .kicker{ display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.14); padding:6px 14px; border-radius:999px; font-size:0.8rem; font-weight:600; letter-spacing:0.03em; margin-bottom:18px; }
+  .hero h1{ color:#fff; font-size:2.15rem; margin:0 0 14px; max-width:640px; }
+  .hero p{ max-width:600px; color:#E4F1E8; font-size:1.02rem; position:relative; }
+
+  section.lesson{ background:var(--card); border:1px solid var(--border); border-radius: var(--radius); padding:34px 36px; margin-top:26px; box-shadow: var(--shadow); scroll-margin-top: 20px; }
+  @media (max-width: 600px){ section.lesson{ padding:24px 20px; } .hero{ padding:30px 22px; } .hero h1{ font-size:1.55rem; } }
+  section.lesson .eyebrow{ font-size:0.78rem; font-weight:700; color:var(--forest); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+  section.lesson h2{ font-size:1.5rem; margin:0 0 6px; }
+  section.lesson .subtitle{ color:var(--ink-soft); margin-bottom:22px; font-size:0.98rem; }
+  section.lesson h3{ font-size:1.05rem; margin:22px 0 10px; }
+  section.lesson p{ margin:10px 0; color:#33403A; }
+  section.lesson ul, section.lesson ol{ color:#33403A; padding-left:22px; }
+  section.lesson li{ margin:6px 0; }
+
+  .box{ border-radius:14px; padding:16px 18px; margin:18px 0; border:1px solid transparent; font-size:0.95rem; }
+  .box .box-title{ font-weight:700; display:flex; align-items:center; gap:8px; margin-bottom:6px; font-family:'Baloo 2',sans-serif; }
+  .box.analogi{ background:var(--amber-soft); border-color:#F2D6A3; } .box.analogi .box-title{ color:#8A5E13; }
+  .box.tip{ background:var(--blue-soft); border-color:#C6DBEE; } .box.tip .box-title{ color:var(--blue); }
+  .box.awas{ background:var(--pink-soft); border-color:#F1C3CE; } .box.awas .box-title{ color:#9E3A50; }
+  .box.hasil{ background:#EEF7F0; border-color:#CBE6D3; } .box.hasil .box-title{ color:var(--forest-dark); }
+
+  table.tbl{ width:100%; border-collapse:collapse; margin:16px 0; font-size:0.9rem; }
+  table.tbl th, table.tbl td{ border:1px solid var(--border); padding:10px 12px; text-align:left; vertical-align:top; }
+  table.tbl th{ background:#F4F8F4; color:var(--forest-dark); font-family:'Baloo 2',sans-serif; }
+  table.tbl code{ background:#EFF3EE; padding:1px 6px; border-radius:6px; }
+
+  /* poin-poin bernomor / kartu ringkas */
+  .point-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; margin:16px 0; }
+  .point-card{ border:1px solid var(--border); border-radius:12px; padding:14px 16px; background:#FBFCFA; }
+  .point-card .pc-num{ font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--forest); font-weight:700; }
+  .point-card h4{ margin:4px 0 6px; font-size:0.95rem; color:var(--forest-dark); font-family:'Baloo 2',sans-serif; }
+  .point-card p{ margin:0; font-size:0.85rem; color:var(--ink-soft); }
+
+  .steps{ display:grid; gap:12px; margin:16px 0; }
+  .step{ display:flex; gap:14px; padding:14px 16px; border:1px solid var(--border); border-radius:12px; background:#FBFCFA; }
+  .step .n{ flex:none; width:30px; height:30px; border-radius:50%; background:var(--forest); color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:0.9rem; }
+
+  .tagchip{ display:inline-block; background:var(--amber-soft); color:#8A5E13; font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:999px; margin:2px 4px 2px 0; }
+  .tagchip.blue{ background:var(--blue-soft); color:var(--blue); }
+  .tagchip.pink{ background:var(--pink-soft); color:#9E3A50; }
+  .tagchip.green{ background:#EEF7F0; color:var(--forest-dark); }
+
+  .lesson-nav{ display:flex; justify-content:space-between; gap:12px; margin-top:14px; flex-wrap:wrap;}
+  .lesson-nav a{ text-decoration:none; font-size:0.85rem; color:var(--forest); font-weight:600; background:var(--amber-soft); padding:8px 14px; border-radius:999px; }
+
+  footer{ text-align:center; color:var(--ink-soft); font-size:0.85rem; padding:40px 20px 10px; }
+  ::-webkit-scrollbar{ width:9px; } ::-webkit-scrollbar-thumb{ background:#C7D6CB; border-radius:10px; }
+  .mascot{ display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:var(--forest); color:#fff; font-size:12px; flex:none; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot">🧩</span> RPL Poin Penting</div>
+    <nav class="toc" id="toc">
+      <div class="grp-label">Dasar</div>
+      <a href="#beranda"><span class="num">00</span> Beranda</a>
+      <a href="#definisi"><span class="num">01</span> Definisi &amp; Konsep</a>
+      <a href="#karakteristik"><span class="num">02</span> Karakteristik PL</a>
+      <a href="#sdlc"><span class="num">03</span> Siklus Hidup (SDLC)</a>
+
+      <div class="grp-label">Model Pengembangan</div>
+      <a href="#waterfall"><span class="num">04</span> Model Waterfall</a>
+      <a href="#agile"><span class="num">05</span> Model Agile &amp; Scrum</a>
+      <a href="#model-lain"><span class="num">06</span> Model Lainnya</a>
+
+      <div class="grp-label">Tahapan Rekayasa</div>
+      <a href="#analisis"><span class="num">07</span> Analisis Kebutuhan</a>
+      <a href="#perancangan"><span class="num">08</span> Perancangan (UML dkk)</a>
+      <a href="#implementasi"><span class="num">09</span> Implementasi</a>
+      <a href="#pengujian"><span class="num">10</span> Pengujian (Testing)</a>
+      <a href="#pemeliharaan"><span class="num">11</span> Pemeliharaan</a>
+
+      <div class="grp-label">Pendukung</div>
+      <a href="#dokumentasi"><span class="num">12</span> Dokumentasi</a>
+      <a href="#manajemen"><span class="num">13</span> Manajemen Proyek</a>
+      <a href="#kualitas"><span class="num">14</span> Kualitas Perangkat Lunak</a>
+      <a href="#tools"><span class="num">15</span> Tools &amp; Version Control</a>
+      <a href="#peran"><span class="num">16</span> Peran dalam Tim</a>
+
+      <div class="grp-label">Penutup</div>
+      <a href="#rangkuman"><span class="num">17</span> Rangkuman</a>
+    </nav>
+  </aside>
+
+  <main>
+
+    <section class="hero" id="beranda">
+      <span class="kicker">🧩 Ringkasan Poin — Rekayasa Perangkat Lunak</span>
+      <h1>Rekayasa Perangkat Lunak, dirangkum jadi poin-poin penting.</h1>
+      <p>Halaman ini merangkum konsep inti Rekayasa Perangkat Lunak (Software
+      Engineering) secara ringkas dan terstruktur — cocok dipakai untuk belajar
+      cepat, mengulang materi, atau referensi sebelum ujian. Setiap bagian
+      difokuskan pada poin-poin kunci, bukan uraian panjang.</p>
+    </section>
+
+    <!-- 01 -->
+    <section class="lesson" id="definisi">
+      <div class="eyebrow">01</div>
+      <h2>Definisi &amp; Konsep Dasar</h2>
+      <p class="subtitle">Apa sebenarnya yang dimaksud "Rekayasa Perangkat Lunak"?</p>
+
+      <div class="box tip">
+        <div class="box-title"><span class="mascot">📌</span> Definisi inti</div>
+        Rekayasa Perangkat Lunak (RPL) adalah <b>pendekatan sistematis, disiplin,
+        dan terukur</b> dalam mengembangkan, mengoperasikan, dan memelihara
+        perangkat lunak — mulai dari analisis kebutuhan sampai perangkat lunak
+        tersebut tidak lagi digunakan.
+      </div>
+
+      <div class="point-grid">
+        <div class="point-card"><span class="pc-num">•</span><h4>Bukan sekadar "coding"</h4><p>RPL mencakup keseluruhan proses: perencanaan, desain, pembuatan, pengujian, hingga pemeliharaan — coding hanyalah salah satu tahapannya.</p></div>
+        <div class="point-card"><span class="pc-num">•</span><h4>Sistematis &amp; terukur</h4><p>Menggunakan metodologi, standar, dan metrik yang jelas, bukan trial-and-error semata.</p></div>
+        <div class="point-card"><span class="pc-num">•</span><h4>Berorientasi kebutuhan pengguna</h4><p>Perangkat lunak dibangun untuk menyelesaikan masalah nyata sesuai kebutuhan pengguna/organisasi.</p></div>
+        <div class="point-card"><span class="pc-num">•</span><h4>Melibatkan tim</h4><p>Umumnya dikerjakan oleh tim dengan berbagai peran (analis, desainer, programmer, tester, dll), bukan perorangan.</p></div>
+      </div>
+
+      <h3>Tujuan Rekayasa Perangkat Lunak</h3>
+      <ul>
+        <li>Menghasilkan perangkat lunak yang <b>sesuai kebutuhan</b> pengguna.</li>
+        <li>Menjaga <b>kualitas</b> (andal, aman, mudah dirawat).</li>
+        <li>Mengendalikan <b>biaya dan waktu</b> pengembangan.</li>
+        <li>Meminimalkan <b>risiko kegagalan proyek</b>.</li>
+      </ul>
+
+      <div class="lesson-nav"><span></span><a href="#karakteristik">Lanjut: Karakteristik PL →</a></div>
+    </section>
+
+    <!-- 02 -->
+    <section class="lesson" id="karakteristik">
+      <div class="eyebrow">02</div>
+      <h2>Karakteristik Perangkat Lunak</h2>
+      <p class="subtitle">Perangkat lunak berbeda dari produk fisik — beberapa sifat khasnya:</p>
+
+      <table class="tbl">
+        <tr><th>Karakteristik</th><th>Penjelasan</th></tr>
+        <tr><td>Tidak dapat dilihat fisiknya (intangible)</td><td>Perangkat lunak berupa logika dan instruksi, bukan benda fisik.</td></tr>
+        <tr><td>Tidak "aus" seperti barang fisik</td><td>Perangkat lunak tidak rusak karena pemakaian, tapi bisa menjadi usang (obsolete) karena perubahan kebutuhan/teknologi.</td></tr>
+        <tr><td>Kompleksitas tinggi</td><td>Semakin besar sistem, semakin kompleks hubungan antar komponennya.</td></tr>
+        <tr><td>Mudah diubah (dan mudah salah diubah)</td><td>Fleksibel untuk dimodifikasi, tapi perubahan yang tidak hati-hati bisa menimbulkan bug baru.</td></tr>
+        <tr><td>Dibuat, bukan dirakit dari komponen pabrik</td><td>Sebagian besar perangkat lunak masih dibangun khusus (custom-built), meski komponen/library bisa dipakai ulang.</td></tr>
+      </table>
+
+      <div class="lesson-nav"><a href="#definisi">← Balik: Definisi &amp; Konsep</a><a href="#sdlc">Lanjut: Siklus Hidup (SDLC) →</a></div>
+    </section>
+
+    <!-- 03 -->
+    <section class="lesson" id="sdlc">
+      <div class="eyebrow">03</div>
+      <h2>Siklus Hidup Pengembangan Perangkat Lunak (SDLC)</h2>
+      <p class="subtitle">Software Development Life Cycle — tahapan umum yang dilalui hampir semua proyek perangkat lunak.</p>
+
+      <div class="steps">
+        <div class="step"><div class="n">1</div><div><b>Perencanaan (Planning)</b> — menentukan tujuan proyek, ruang lingkup, sumber daya, dan estimasi waktu/biaya.</div></div>
+        <div class="step"><div class="n">2</div><div><b>Analisis Kebutuhan (Requirement Analysis)</b> — mengumpulkan dan mendokumentasikan apa yang dibutuhkan pengguna.</div></div>
+        <div class="step"><div class="n">3</div><div><b>Perancangan (Design)</b> — merancang arsitektur sistem, basis data, dan antarmuka berdasarkan hasil analisis.</div></div>
+        <div class="step"><div class="n">4</div><div><b>Implementasi (Coding)</b> — menerjemahkan hasil rancangan menjadi kode program sungguhan.</div></div>
+        <div class="step"><div class="n">5</div><div><b>Pengujian (Testing)</b> — memverifikasi perangkat lunak berjalan sesuai kebutuhan dan bebas dari bug kritis.</div></div>
+        <div class="step"><div class="n">6</div><div><b>Deployment</b> — merilis perangkat lunak agar bisa digunakan pengguna sungguhan.</div></div>
+        <div class="step"><div class="n">7</div><div><b>Pemeliharaan (Maintenance)</b> — memperbaiki bug, menambah fitur, dan menyesuaikan dengan kebutuhan yang berubah setelah rilis.</div></div>
+      </div>
+
+      <div class="box awas">
+        <div class="box-title"><span class="mascot">⚠️</span> Perlu diingat</div>
+        SDLC adalah <b>kerangka umum</b> — urutan dan seberapa ketat tahapan ini
+        diikuti berbeda-beda tergantung <b>model pengembangan</b> yang dipilih
+        (dibahas di bagian berikutnya).
+      </div>
+
+      <div class="lesson-nav"><a href="#karakteristik">← Balik: Karakteristik PL</a><a href="#waterfall">Lanjut: Model Waterfall →</a></div>
+    </section>
+
+    <!-- 04 -->
+    <section class="lesson" id="waterfall">
+      <div class="eyebrow">04</div>
+      <h2>Model Waterfall (Air Terjun)</h2>
+      <p class="subtitle">Model klasik, tahapan berurutan dan linear seperti air terjun.</p>
+
+      <div class="box tip">
+        <div class="box-title"><span class="mascot">📌</span> Cara kerja</div>
+        Setiap tahap SDLC dikerjakan <b>berurutan, satu per satu</b>, dan tahap
+        berikutnya baru dimulai setelah tahap sebelumnya benar-benar selesai.
+        Tidak ada (atau sangat sedikit) kembali ke tahap sebelumnya.
+      </div>
+
+      <table class="tbl">
+        <tr><th>Kelebihan</th><th>Kekurangan</th></tr>
+        <tr><td>Struktur jelas, mudah dikelola dan dijadwalkan</td><td>Kaku — sulit menyesuaikan jika kebutuhan berubah di tengah jalan</td></tr>
+        <tr><td>Dokumentasi lengkap di tiap tahap</td><td>Pengguna baru bisa melihat hasil di akhir proyek</td></tr>
+        <tr><td>Cocok untuk proyek dengan kebutuhan yang sudah jelas &amp; stabil</td><td>Risiko besar jika ada kesalahan ditemukan di tahap akhir</td></tr>
+      </table>
+
+      <p><b>Paling cocok untuk:</b> proyek berskala kecil-menengah dengan kebutuhan yang sudah pasti dan jarang berubah.</p>
+
+      <div class="lesson-nav"><a href="#sdlc">← Balik: Siklus Hidup</a><a href="#agile">Lanjut: Agile &amp; Scrum →</a></div>
+    </section>
+
+    <!-- 05 -->
+    <section class="lesson" id="agile">
+      <div class="eyebrow">05</div>
+      <h2>Model Agile &amp; Scrum</h2>
+      <p class="subtitle">Pendekatan modern yang mengutamakan fleksibilitas dan iterasi cepat.</p>
+
+      <div class="box tip">
+        <div class="box-title"><span class="mascot">📌</span> Cara kerja Agile</div>
+        Proyek dipecah menjadi <b>iterasi-iterasi kecil</b> (biasanya disebut
+        <i>sprint</i>), masing-masing menghasilkan bagian perangkat lunak yang
+        bisa langsung diuji dan dievaluasi, sebelum lanjut ke iterasi berikutnya.
+      </div>
+
+      <h3>4 Nilai Utama Agile Manifesto</h3>
+      <div class="point-grid">
+        <div class="point-card"><h4>Individu &amp; interaksi</h4><p>...lebih diutamakan daripada proses dan tools yang kaku.</p></div>
+        <div class="point-card"><h4>Perangkat lunak yang berjalan</h4><p>...lebih diutamakan daripada dokumentasi yang lengkap tapi lambat.</p></div>
+        <div class="point-card"><h4>Kolaborasi dengan pengguna</h4><p>...lebih diutamakan daripada negosiasi kontrak yang kaku.</p></div>
+        <div class="point-card"><h4>Tanggap terhadap perubahan</h4><p>...lebih diutamakan daripada terpaku mengikuti rencana awal.</p></div>
+      </div>
+
+      <h3>Scrum — kerangka kerja Agile yang paling populer</h3>
+      <table class="tbl">
+        <tr><th>Elemen</th><th>Keterangan</th></tr>
+        <tr><td>Sprint</td><td>Periode kerja tetap (biasanya 1–4 minggu) untuk menghasilkan bagian fitur yang siap pakai.</td></tr>
+        <tr><td>Product Backlog</td><td>Daftar semua fitur/kebutuhan yang perlu dikerjakan, diurutkan berdasarkan prioritas.</td></tr>
+        <tr><td>Sprint Planning</td><td>Rapat menentukan pekerjaan apa saja yang dikerjakan dalam satu sprint.</td></tr>
+        <tr><td>Daily Standup</td><td>Rapat singkat harian: apa yang sudah dikerjakan, apa yang akan dikerjakan, kendala apa yang dihadapi.</td></tr>
+        <tr><td>Sprint Review &amp; Retrospective</td><td>Evaluasi hasil kerja sprint dan proses tim, untuk perbaikan di sprint berikutnya.</td></tr>
+      </table>
+
+      <p><b>Paling cocok untuk:</b> proyek dengan kebutuhan yang masih bisa berubah, atau butuh rilis fitur bertahap dan cepat.</p>
+
+      <div class="lesson-nav"><a href="#waterfall">← Balik: Model Waterfall</a><a href="#model-lain">Lanjut: Model Lainnya →</a></div>
+    </section>
+
+    <!-- 06 -->
+    <section class="lesson" id="model-lain">
+      <div class="eyebrow">06</div>
+      <h2>Model Pengembangan Lainnya</h2>
+      <p class="subtitle">Ringkasan model-model lain yang juga umum dipelajari dalam RPL.</p>
+
+      <table class="tbl">
+        <tr><th>Model</th><th>Ciri Khas</th><th>Cocok untuk</th></tr>
+        <tr><td>Prototyping</td><td>Membuat purwarupa (contoh tampilan/fungsi) terlebih dulu untuk divalidasi pengguna, sebelum sistem penuh dibangun.</td><td>Kebutuhan pengguna belum sepenuhnya jelas di awal.</td></tr>
+        <tr><td>Spiral</td><td>Menggabungkan Waterfall dan Prototyping, dikerjakan berulang dalam "putaran spiral" dengan analisis risiko di tiap putaran.</td><td>Proyek besar dan berisiko tinggi.</td></tr>
+        <tr><td>RAD (Rapid Application Development)</td><td>Menekankan pengembangan cepat dengan komponen yang bisa dipakai ulang dan keterlibatan pengguna intensif.</td><td>Proyek dengan tenggat waktu ketat.</td></tr>
+        <tr><td>V-Model</td><td>Setiap tahap pengembangan punya tahap pengujian yang sejajar (berbentuk huruf V), pengujian direncanakan sejak awal.</td><td>Proyek yang menuntut kualitas &amp; verifikasi ketat, misalnya sistem kesehatan/keselamatan.</td></tr>
+      </table>
+
+      <div class="lesson-nav"><a href="#agile">← Balik: Agile &amp; Scrum</a><a href="#analisis">Lanjut: Analisis Kebutuhan →</a></div>
+    </section>
+
+    <!-- 07 -->
+    <section class="lesson" id="analisis">
+      <div class="eyebrow">07</div>
+      <h2>Analisis Kebutuhan (Requirement Engineering)</h2>
+      <p class="subtitle">Tahap paling menentukan — kesalahan di sini berdampak ke seluruh proyek.</p>
+
+      <h3>Jenis Kebutuhan</h3>
+      <table class="tbl">
+        <tr><th>Jenis</th><th>Contoh</th></tr>
+        <tr><td><b>Kebutuhan Fungsional</b> — apa yang harus dilakukan sistem</td><td>"Sistem dapat menyimpan data siswa", "Pengguna dapat login"</td></tr>
+        <tr><td><b>Kebutuhan Non-Fungsional</b> — seberapa baik sistem melakukannya</td><td>Kecepatan respons, keamanan data, kemudahan digunakan (usability)</td></tr>
+      </table>
+
+      <h3>Teknik Pengumpulan Kebutuhan</h3>
+      <div class="point-grid">
+        <div class="point-card"><h4>Wawancara</h4><p>Tanya jawab langsung dengan calon pengguna/klien.</p></div>
+        <div class="point-card"><h4>Kuesioner</h4><p>Mengumpulkan data dari banyak responden sekaligus.</p></div>
+        <div class="point-card"><h4>Observasi</h4><p>Mengamati langsung proses kerja yang ingin diotomatisasi.</p></div>
+        <div class="point-card"><h4>Studi Dokumen</h4><p>Menelaah dokumen/prosedur kerja yang sudah ada.</p></div>
+      </div>
+
+      <div class="lesson-nav"><a href="#model-lain">← Balik: Model Lainnya</a><a href="#perancangan">Lanjut: Perancangan →</a></div>
+    </section>
+
+    <!-- 08 -->
+    <section class="lesson" id="perancangan">
+      <div class="eyebrow">08</div>
+      <h2>Perancangan (Design) — UML, ERD, DFD, Flowchart</h2>
+      <p class="subtitle">Menerjemahkan kebutuhan menjadi rancangan yang siap diimplementasikan.</p>
+
+      <h3>Diagram UML (Unified Modeling Language) yang paling umum</h3>
+      <table class="tbl">
+        <tr><th>Diagram</th><th>Menggambarkan</th></tr>
+        <tr><td>Use Case Diagram</td><td>Interaksi antara pengguna (aktor) dengan fitur-fitur sistem.</td></tr>
+        <tr><td>Class Diagram</td><td>Struktur kelas, atribut, method, dan hubungan antar objek dalam sistem (relevan untuk OOP — ingat konsep class di seri PHP/JavaScript!).</td></tr>
+        <tr><td>Activity Diagram</td><td>Alur aktivitas/proses kerja, mirip flowchart tapi lebih formal.</td></tr>
+        <tr><td>Sequence Diagram</td><td>Urutan interaksi antar objek dari waktu ke waktu untuk satu skenario tertentu.</td></tr>
+      </table>
+
+      <h3>Diagram lain yang sering dipakai</h3>
+      <div class="point-grid">
+        <div class="point-card"><h4>ERD (Entity Relationship Diagram)</h4><p>Menggambarkan struktur data dan relasi antar tabel di database — ingat Primary Key &amp; Foreign Key di seri SQL!</p></div>
+        <div class="point-card"><h4>DFD (Data Flow Diagram)</h4><p>Menggambarkan aliran data yang masuk, diproses, dan keluar dari sistem.</p></div>
+        <div class="point-card"><h4>Flowchart</h4><p>Menggambarkan alur logika program langkah demi langkah menggunakan simbol standar.</p></div>
+      </div>
+
+      <div class="lesson-nav"><a href="#analisis">← Balik: Analisis Kebutuhan</a><a href="#implementasi">Lanjut: Implementasi →</a></div>
+    </section>
+
+    <!-- 09 -->
+    <section class="lesson" id="implementasi">
+      <div class="eyebrow">09</div>
+      <h2>Implementasi (Coding)</h2>
+      <p class="subtitle">Tahap menerjemahkan rancangan menjadi kode program yang berjalan.</p>
+
+      <ul>
+        <li>Rancangan (UML, ERD, dll) diterjemahkan menjadi kode menggunakan
+        bahasa pemrograman yang dipilih (misalnya PHP untuk logika server,
+        JavaScript untuk interaktivitas, SQL untuk database).</li>
+        <li>Idealnya mengikuti <b>coding standard/konvensi</b> yang disepakati
+        tim, agar kode mudah dibaca dan dirawat orang lain.</li>
+        <li>Praktik baik: penamaan variabel/fungsi yang jelas, pemisahan kode
+        per fungsi/modul, dan pemberian komentar secukupnya.</li>
+        <li>Umumnya menggunakan <b>version control</b> (seperti Git) agar
+        perubahan kode dari banyak anggota tim bisa digabungkan dengan aman.</li>
+      </ul>
+
+      <div class="lesson-nav"><a href="#perancangan">← Balik: Perancangan</a><a href="#pengujian">Lanjut: Pengujian →</a></div>
+    </section>
+
+    <!-- 10 -->
+    <section class="lesson" id="pengujian">
+      <div class="eyebrow">10</div>
+      <h2>Pengujian Perangkat Lunak (Testing)</h2>
+      <p class="subtitle">Memastikan perangkat lunak bekerja sesuai kebutuhan sebelum dirilis.</p>
+
+      <h3>Berdasarkan cara pengujian</h3>
+      <table class="tbl">
+        <tr><th>Jenis</th><th>Penjelasan</th></tr>
+        <tr><td>Black Box Testing</td><td>Menguji fungsi dari sisi input-output saja, tanpa melihat kode di dalamnya.</td></tr>
+        <tr><td>White Box Testing</td><td>Menguji dengan memeriksa struktur/logika kode program secara langsung.</td></tr>
+      </table>
+
+      <h3>Berdasarkan tingkatan (level testing)</h3>
+      <div class="point-grid">
+        <div class="point-card"><span class="tagchip">Unit Testing</span><p>Menguji bagian terkecil kode (misalnya satu fungsi) secara terpisah.</p></div>
+        <div class="point-card"><span class="tagchip blue">Integration Testing</span><p>Menguji apakah beberapa modul yang digabungkan bekerja dengan benar bersama-sama.</p></div>
+        <div class="point-card"><span class="tagchip pink">System Testing</span><p>Menguji keseluruhan sistem secara utuh, sesuai kebutuhan yang sudah ditentukan.</p></div>
+        <div class="point-card"><span class="tagchip green">User Acceptance Testing (UAT)</span><p>Pengguna sungguhan mencoba sistem untuk memastikan sudah sesuai kebutuhan nyata sebelum dirilis.</p></div>
+      </div>
+
+      <div class="lesson-nav"><a href="#implementasi">← Balik: Implementasi</a><a href="#pemeliharaan">Lanjut: Pemeliharaan →</a></div>
+    </section>
+
+    <!-- 11 -->
+    <section class="lesson" id="pemeliharaan">
+      <div class="eyebrow">11</div>
+      <h2>Pemeliharaan (Maintenance)</h2>
+      <p class="subtitle">Perangkat lunak tidak selesai begitu dirilis — justru di sinilah siklus hidupnya paling panjang.</p>
+
+      <table class="tbl">
+        <tr><th>Jenis Pemeliharaan</th><th>Penjelasan</th></tr>
+        <tr><td>Corrective</td><td>Memperbaiki bug/kesalahan yang ditemukan setelah sistem digunakan.</td></tr>
+        <tr><td>Adaptive</td><td>Menyesuaikan sistem dengan perubahan lingkungan (misalnya update sistem operasi/server).</td></tr>
+        <tr><td>Perfective</td><td>Meningkatkan performa atau menambah fitur baru sesuai permintaan pengguna.</td></tr>
+        <tr><td>Preventive</td><td>Mengubah struktur kode agar lebih mudah dirawat di masa depan, sebelum masalah muncul.</td></tr>
+      </table>
+
+      <div class="lesson-nav"><a href="#pengujian">← Balik: Pengujian</a><a href="#dokumentasi">Lanjut: Dokumentasi →</a></div>
+    </section>
+
+    <!-- 12 -->
+    <section class="lesson" id="dokumentasi">
+      <div class="eyebrow">12</div>
+      <h2>Dokumentasi Perangkat Lunak</h2>
+      <p class="subtitle">Sering dianggap remeh, padahal sangat penting untuk keberlangsungan proyek.</p>
+
+      <div class="point-grid">
+        <div class="point-card"><h4>Dokumen Kebutuhan (SRS)</h4><p>Software Requirement Specification — mencatat seluruh kebutuhan fungsional &amp; non-fungsional yang disepakati.</p></div>
+        <div class="point-card"><h4>Dokumen Perancangan</h4><p>Berisi diagram UML, ERD, arsitektur sistem, dan penjelasan desain lainnya.</p></div>
+        <div class="point-card"><h4>Dokumentasi Kode</h4><p>Komentar dalam kode dan panduan teknis (technical guide) untuk developer lain.</p></div>
+        <div class="point-card"><h4>Manual Pengguna</h4><p>Panduan penggunaan sistem untuk pengguna akhir (end user).</p></div>
+      </div>
+
+      <div class="lesson-nav"><a href="#pemeliharaan">← Balik: Pemeliharaan</a><a href="#manajemen">Lanjut: Manajemen Proyek →</a></div>
+    </section>
+
+    <!-- 13 -->
+    <section class="lesson" id="manajemen">
+      <div class="eyebrow">13</div>
+      <h2>Manajemen Proyek Perangkat Lunak</h2>
+      <p class="subtitle">Mengelola tim, waktu, biaya, dan risiko agar proyek selesai tepat sasaran.</p>
+
+      <ul>
+        <li><b>Estimasi</b> — memperkirakan waktu, biaya, dan sumber daya yang dibutuhkan sebelum proyek dimulai.</li>
+        <li><b>Penjadwalan</b> — menyusun urutan dan tenggat waktu pengerjaan tiap tahap/fitur.</li>
+        <li><b>Alokasi sumber daya</b> — menentukan siapa mengerjakan apa, sesuai keahlian masing-masing.</li>
+        <li><b>Manajemen risiko</b> — mengenali potensi masalah sejak awal dan menyiapkan rencana antisipasi.</li>
+        <li><b>Pemantauan progres</b> — melacak kemajuan proyek dibanding rencana awal (sering dibantu tools seperti Trello, Jira, atau Gantt chart).</li>
+      </ul>
+
+      <div class="lesson-nav"><a href="#dokumentasi">← Balik: Dokumentasi</a><a href="#kualitas">Lanjut: Kualitas Perangkat Lunak →</a></div>
+    </section>
+
+    <!-- 14 -->
+    <section class="lesson" id="kualitas">
+      <div class="eyebrow">14</div>
+      <h2>Kualitas Perangkat Lunak</h2>
+      <p class="subtitle">Beberapa aspek yang menentukan apakah perangkat lunak dianggap "berkualitas".</p>
+
+      <table class="tbl">
+        <tr><th>Aspek</th><th>Penjelasan</th></tr>
+        <tr><td>Correctness</td><td>Berfungsi sesuai spesifikasi yang telah ditentukan.</td></tr>
+        <tr><td>Reliability</td><td>Dapat diandalkan bekerja secara konsisten tanpa gagal fungsi.</td></tr>
+        <tr><td>Usability</td><td>Mudah dipelajari dan digunakan oleh pengguna.</td></tr>
+        <tr><td>Efficiency</td><td>Menggunakan sumber daya (waktu, memori) secara wajar dan optimal.</td></tr>
+        <tr><td>Maintainability</td><td>Mudah dipahami, diperbaiki, dan dikembangkan lebih lanjut.</td></tr>
+        <tr><td>Portability</td><td>Dapat berjalan di lingkungan/perangkat yang berbeda-beda.</td></tr>
+        <tr><td>Security</td><td>Terlindungi dari akses atau modifikasi yang tidak sah.</td></tr>
+      </table>
+
+      <div class="lesson-nav"><a href="#manajemen">← Balik: Manajemen Proyek</a><a href="#tools">Lanjut: Tools &amp; Version Control →</a></div>
+    </section>
+
+    <!-- 15 -->
+    <section class="lesson" id="tools">
+      <div class="eyebrow">15</div>
+      <h2>Tools &amp; Version Control</h2>
+      <p class="subtitle">Perangkat pendukung yang lazim digunakan dalam praktik RPL sehari-hari.</p>
+
+      <div class="point-grid">
+        <div class="point-card"><h4>Version Control (Git)</h4><p>Melacak setiap perubahan kode, memungkinkan banyak developer bekerja bersama tanpa saling menimpa pekerjaan.</p></div>
+        <div class="point-card"><h4>Code Editor / IDE</h4><p>Aplikasi untuk menulis kode, misalnya Visual Studio Code — sudah dipakai di seri belajar PHP/JavaScript sebelumnya.</p></div>
+        <div class="point-card"><h4>Project Management Tools</h4><p>Trello, Jira, atau Asana — untuk melacak tugas dan progres tim.</p></div>
+        <div class="point-card"><h4>Testing Tools</h4><p>Perangkat bantu otomatisasi pengujian, agar tidak semua diuji manual satu-satu.</p></div>
+      </div>
+
+      <div class="box tip">
+        <div class="box-title"><span class="mascot">📌</span> Konsep dasar Git</div>
+        <b>Repository</b> = tempat penyimpanan kode &amp; riwayat perubahannya.
+        <b>Commit</b> = "menyimpan" satu titik perubahan tertentu, lengkap dengan
+        catatan perubahannya. <b>Branch</b> = jalur pengembangan terpisah, agar
+        fitur baru bisa dikerjakan tanpa mengganggu kode utama yang sudah stabil.
+      </div>
+
+      <div class="lesson-nav"><a href="#kualitas">← Balik: Kualitas Perangkat Lunak</a><a href="#peran">Lanjut: Peran dalam Tim →</a></div>
+    </section>
+
+    <!-- 16 -->
+    <section class="lesson" id="peran">
+      <div class="eyebrow">16</div>
+      <h2>Peran dalam Tim Pengembangan Perangkat Lunak</h2>
+      <p class="subtitle">Proyek perangkat lunak umumnya melibatkan berbagai peran, bukan satu orang saja.</p>
+
+      <table class="tbl">
+        <tr><th>Peran</th><th>Tanggung Jawab Utama</th></tr>
+        <tr><td>Project Manager</td><td>Mengelola jadwal, anggaran, dan koordinasi tim secara keseluruhan.</td></tr>
+        <tr><td>System/Business Analyst</td><td>Menganalisis kebutuhan pengguna dan menerjemahkannya menjadi spesifikasi sistem.</td></tr>
+        <tr><td>UI/UX Designer</td><td>Merancang tampilan dan pengalaman pengguna agar mudah dan nyaman digunakan.</td></tr>
+        <tr><td>Programmer / Developer</td><td>Menulis kode program berdasarkan rancangan yang telah dibuat.</td></tr>
+        <tr><td>Quality Assurance (QA) / Tester</td><td>Menguji perangkat lunak untuk memastikan kualitas sebelum dirilis.</td></tr>
+        <tr><td>DevOps Engineer</td><td>Mengelola proses deployment, infrastruktur server, dan otomatisasi rilis.</td></tr>
+        <tr><td>Database Administrator</td><td>Merancang dan menjaga performa serta keamanan basis data.</td></tr>
+      </table>
+
+      <div class="lesson-nav"><a href="#tools">← Balik: Tools &amp; Version Control</a><a href="#rangkuman">Lanjut: Rangkuman →</a></div>
+    </section>
+
+    <!-- 17 -->
+    <section class="lesson" id="rangkuman">
+      <div class="eyebrow">17</div>
+      <h2>Rangkuman</h2>
+      <p class="subtitle">Inti dari keseluruhan materi Rekayasa Perangkat Lunak di halaman ini.</p>
+
+      <div class="box hasil">
+        <div class="box-title"><span class="mascot">🏁</span> Poin-poin kunci</div>
+        <ul style="margin:6px 0 0;">
+          <li>RPL adalah pendekatan <b>sistematis</b> membangun perangkat lunak, mencakup seluruh siklus hidupnya (SDLC).</li>
+          <li>Ada berbagai <b>model pengembangan</b> (Waterfall, Agile/Scrum, Prototyping, Spiral, RAD, V-Model), dipilih sesuai karakteristik proyek.</li>
+          <li>Tahapan inti: <b>analisis kebutuhan → perancangan → implementasi → pengujian → pemeliharaan</b>, didukung dokumentasi di tiap tahap.</li>
+          <li><b>Kualitas</b> perangkat lunak diukur dari berbagai aspek, bukan cuma "berjalan tanpa error".</li>
+          <li>Proyek RPL yang sehat melibatkan <b>manajemen proyek</b> yang baik dan <b>tim dengan peran jelas</b>.</li>
+        </ul>
+      </div>
+
+      <div class="box tip">
+        <div class="box-title"><span class="mascot">💡</span> Menghubungkan ke praktik</div>
+        Konsep-konsep di halaman ini bukan sekadar teori — semuanya relevan
+        langsung dengan praktik ngoding sehari-hari, seperti membangun Sistem
+        Informasi Data Siswa (analisis kebutuhan → ERD tabel siswa → coding PHP
+        → pengujian CRUD → pemeliharaan saat ada fitur baru).
+      </div>
+    </section>
+
+    <footer>Rekayasa Perangkat Lunak — Ringkasan Poin Penting. 🧩</footer>
+  </main>
+</div>
+
+<script>
+  const links = Array.from(document.querySelectorAll('#toc a'));
+  const tocSections = links.map(l => document.querySelector(l.getAttribute('href')));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = '#' + entry.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+  tocSections.forEach(s => { if (s) observer.observe(s); });
+</script>
+
+</body>
+</html>
